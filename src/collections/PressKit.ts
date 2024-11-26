@@ -1,7 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import path from 'path';
 
 const PressKit: CollectionConfig = {
   slug: 'presskit',
+  access: {
+    read: () => true, // Allow public read access
+    create: () => true, // Optional: restrict to authenticated users
+    update: () => true, // Optional: restrict to authenticated users
+    delete: () => true, // Optional: restrict to authenticated users
+  },
   labels: {
     singular: 'Press Kit',
     plural: 'Press Kits',
@@ -175,6 +182,10 @@ const PressKit: CollectionConfig = {
       type: 'textarea',
     },
   ],
+  upload: {
+    staticDir: '/media',
+    mimeTypes: ['image/*', 'video/*', 'audio/*'],
+  },
 };
 
 export default PressKit; 
