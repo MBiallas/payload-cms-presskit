@@ -5,6 +5,7 @@ import sharp from 'sharp' // sharp-import
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
+import fs from 'fs'
 
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
@@ -18,8 +19,15 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import PressKit from './collections/PressKit'
 
+import { gcsStorage } from '@payloadcms/storage-gcs'
+
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// Read the service account file
+const serviceAccountPath = path.join(dirname, '..', 'presskit-436010-240bbeeded22.json')
+const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf-8'))
 
 export default buildConfig({
   admin: {
@@ -70,7 +78,23 @@ export default buildConfig({
   globals: [Header, Footer],
   plugins: [
     ...plugins,
-    // storage-adapter-placeholder
+    gcsStorage({
+      collections: {
+        media: true,
+        PressKit,
+        // 'media-with-prefix': {
+        //   prefix,
+        // },
+      },
+      bucket: process.env.G_CLOUD_BUCKET_NAME_MEDIA,
+      options: {
+        projectId: process.env.G_CLOUD_PROJECT_ID,
+        credentials: {
+          client_email: serviceAccount.client_email,
+          private_key: serviceAccount.private_key,
+        },
+      },
+    }),
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,

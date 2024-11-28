@@ -13,6 +13,9 @@ const PressKit: CollectionConfig = {
     singular: 'Press Kit',
     plural: 'Press Kits',
   },
+  upload: {
+    mimeTypes: ['image/*', 'video/*', 'audio/*'],
+  },
   fields: [
     // Basic Information
     {
@@ -182,10 +185,6 @@ const PressKit: CollectionConfig = {
       type: 'textarea',
     },
   ],
-  upload: {
-    staticDir: '/media',
-    mimeTypes: ['image/*', 'video/*', 'audio/*'],
-  },
 };
 
 export default PressKit; 
