@@ -105,6 +105,9 @@ const PressKit: CollectionConfig = {
         { name: 'residentAdvisor', type: 'text', label: 'Resident Advisor URL' },
         { name: 'bandcamp', type: 'text', label: 'Bandcamp URL' },
         { name: 'mixcloud', type: 'text', label: 'Mixcloud URL' },
+        { name: 'tiktok', type: 'text', label: 'TikTok URL' },
+        { name: 'youtube', type: 'text', label: 'YouTube URL' },
+        { name: 'X', type: 'text', label: 'X URL' },
       ],
     },
 

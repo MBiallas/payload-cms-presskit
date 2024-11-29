@@ -610,6 +610,9 @@ export interface Presskit {
     residentAdvisor?: string | null;
     bandcamp?: string | null;
     mixcloud?: string | null;
+    tiktok?: string | null;
+    youtube?: string | null;
+    X?: string | null;
   };
   bio?: string | null;
   pressPhotos?:
@@ -1125,6 +1128,9 @@ export interface PresskitSelect<T extends boolean = true> {
         residentAdvisor?: T;
         bandcamp?: T;
         mixcloud?: T;
+        tiktok?: T;
+        youtube?: T;
+        X?: T;
       };
   bio?: T;
   pressPhotos?:
