@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload'
 import path from 'path';
 
+// Add this constant for the storage prefix
+// const STORAGE_PREFIX = 'https:/storage.googleapis.com/presskit-media-files';
+
 const PressKit: CollectionConfig = {
   slug: 'presskit',
   access: {
@@ -16,6 +19,31 @@ const PressKit: CollectionConfig = {
   upload: {
     mimeTypes: ['image/*', 'video/*', 'audio/*'],
   },
+  // hooks: {
+  //   beforeChange: [
+  //     ({ req, data }) => {
+  //       console.log('🔄 PressKit Before Change:', {
+  //         profileImage: data.profileImage,
+  //         pressPhotos: data.pressPhotos,
+  //       });
+  //       return data;
+  //     }
+  //   ],
+  //   afterChange: [
+  //     ({ req, doc }) => {
+  //       console.log('✅ PressKit After Change:', {
+  //         id: doc.id,
+  //         profileImage: doc.profileImage,
+  //         pressPhotos: doc.pressPhotos?.map(photo => ({
+  //           id: photo.id,
+  //           imageUrl: photo.image?.url,
+  //           sizes: photo.image?.sizes
+  //         }))
+  //       });
+  //       return doc;
+  //     }
+  //   ],
+  // },
   fields: [
     // Basic Information
     {
