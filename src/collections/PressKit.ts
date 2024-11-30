@@ -1,8 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import path from 'path';
-
-// Add this constant for the storage prefix
-// const STORAGE_PREFIX = 'https:/storage.googleapis.com/presskit-media-files';
+import { mainCategories, parentGenres, subGenres } from '../fields/genreOptions';
 
 const PressKit: CollectionConfig = {
   slug: 'presskit',
@@ -19,7 +17,6 @@ const PressKit: CollectionConfig = {
   upload: {
     mimeTypes: ['image/*', 'video/*', 'audio/*'],
   },
-  // hooks: {
   //   beforeChange: [
   //     ({ req, data }) => {
   //       console.log('🔄 PressKit Before Change:', {
@@ -74,10 +71,99 @@ const PressKit: CollectionConfig = {
         { name: 'location', type: 'text', label: 'Location' },
         { name: 'bookingFee', type: 'text', label: 'Booking Fee' },
         { name: 'taxId', type: 'text', label: 'Tax ID' },
-        { name: 'genre', type: 'text', label: 'Genre' },
         { name: 'labelAffiliation', type: 'text', label: 'Label Affiliation' },
       ],
     },
+     // Genre Tags - First Set
+     {
+      name: 'genreSet1',
+      type: 'group',
+      label: 'Primary Genre',
+      fields: [
+        {
+          name: 'mainGenre',
+          label: 'Main Genre',
+          type: 'select',
+          required: false,
+          options: mainCategories,
+        },
+        {
+          name: 'parentGenre',
+          label: 'Parent Genre',
+          type: 'select',
+          required: false,
+          options: Object.values(parentGenres).flat(),
+        },
+        {
+          name: 'subGenre',
+          label: 'Sub Genre',
+          type: 'select',
+          required: false,
+          options: Object.values(subGenres).flat(),
+        },
+      ],
+    },
+
+    // Genre Tags - Second Set
+    {
+      name: 'genreSet2',
+      type: 'group',
+      label: 'Secondary Genre',
+      fields: [
+        {
+          name: 'mainGenre',
+          label: 'Main Genre',
+          type: 'select',
+          required: false,
+          options: mainCategories,
+        },
+        {
+          name: 'parentGenre',
+          label: 'Parent Genre',
+          type: 'select',
+          required: false,
+          options: Object.values(parentGenres).flat(),
+        },
+        {
+          name: 'subGenre',
+          label: 'Sub Genre',
+          type: 'select',
+          required: false,
+          options: Object.values(subGenres).flat(),
+        },
+      ],
+    },
+
+    // Genre Tags - Third Set
+    {
+      name: 'genreSet3',
+      type: 'group',
+      label: 'Tertiary Genre',
+      fields: [
+        {
+          name: 'mainGenre',
+          label: 'Main Genre',
+          type: 'select',
+          required: false,
+          options: mainCategories,
+        },
+        {
+          name: 'parentGenre',
+          label: 'Parent Genre',
+          type: 'select',
+          required: false,
+          options: Object.values(parentGenres).flat(),
+        },
+        {
+          name: 'subGenre',
+          label: 'Sub Genre',
+          type: 'select',
+          required: false,
+          options: Object.values(subGenres).flat(),
+        },
+      ],
+    },
+
     {
       name: 'bookingAgency',
       label: 'Booking Agency',
@@ -215,6 +301,8 @@ const PressKit: CollectionConfig = {
       label: 'Additional Info',
       type: 'textarea',
     },
+
+   
   ],
 };
 
