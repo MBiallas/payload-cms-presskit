@@ -8,3 +8,5 @@ node_modules
 
 # Payload default media upload directory
 public/media/
+presskit-436010-240bbeeded22.json
+package-lock.json
