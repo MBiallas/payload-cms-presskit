@@ -8,8 +8,8 @@ const PressKit: CollectionConfig = {
   access: {
     read: () => true, // Allow public read access
     create: isLoggedIn, // Only logged in users can create
-    update: isLoggedIn, // Reuse existing access control
-    delete: isLoggedIn, // Reuse existing access control
+    update: isAdminOrHasPresskitAccess, // Reuse existing access control
+    delete: isAdminOrHasPresskitAccess, // Reuse existing access control
   },
   admin: {
     useAsTitle: 'artistName',
