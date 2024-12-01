@@ -5,11 +5,12 @@ import { isAdminOrSelf } from '../../access/isAdminOrSelf';
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: {
-    // This property controls how deeply "populated"
-    // relationship docs are that are stored in the req.user.
-    // It should be kept to as low as possible, which 
-    // keeps performance fast.
-    depth: 0,
+    // This enables authentication for this collection
+    tokenExpiration: 7200,
+    verify: false, // Set to true if you want email verification
+    maxLoginAttempts: 5,
+    lockTime: 600000, // Lock for 10 minutes
+    // Add any additional auth options here
   },
   admin: {
     useAsTitle: 'email',
@@ -25,6 +26,12 @@ export const Users: CollectionConfig = {
     delete: isAdmin,
   },
   fields: [
+    {
+      name: 'email',
+      type: 'email',
+      required: true,
+      unique: true,
+    },
     {
       type: 'row',
       fields: [
@@ -64,21 +71,21 @@ export const Users: CollectionConfig = {
       ]
     },
     {
-      name: 'presskit',
+      name: 'presskits',
       // Save this field to JWT so we can use from `req.user`
       saveToJWT: true,
       type: 'relationship',
       relationTo: 'presskit',
       hasMany: true,
       access: {
-        // Only admins can create or update a value for this field
-        create: isAdminFieldLevel,
-        update: isAdminFieldLevel,
+        create: ({ req: { user } }) => Boolean(user),
+        update: ({ req: { user } }) => Boolean(user),
       },
       admin: {
-        condition: ({ roles }) => roles && !roles.includes('admin'),
-        description: 'This field sets which presskits that this user has access to.'
+        description: 'Presskits associated with this user'
       }
-    }
+    },
   ],
-};
+}
+
+export default Users;

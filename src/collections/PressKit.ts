@@ -1,26 +1,89 @@
 import type { CollectionConfig } from 'payload'
-import path from 'path';
-import { mainCategories, parentGenres, subGenres } from '../fields/genreOptions';
+import { isAdminOrHasPresskitAccess } from '../access/isAdminOrHasPresskitAccess'
+import { mainCategories, parentGenres, subGenres } from '../fields/genreOptions'
+import { isLoggedIn } from '@/access/isLoggedIn';
 
 const PressKit: CollectionConfig = {
   slug: 'presskit',
   access: {
     read: () => true, // Allow public read access
-    create: () => true, // Optional: restrict to authenticated users
-    update: () => true, // Optional: restrict to authenticated users
-    delete: () => true, // Optional: restrict to authenticated users
+    create: isLoggedIn, // Only logged in users can create
+    update: isLoggedIn, // Reuse existing access control
+    delete: isLoggedIn, // Reuse existing access control
+  },
+  admin: {
+    useAsTitle: 'artistName',
+    defaultColumns: ['artistName', 'profileImage', 'updatedAt'],
   },
   labels: {
     singular: 'Press Kit',
     plural: 'Press Kits',
   },
-  admin: {
-    useAsTitle: 'artistName',
-    thumbnail: 'profileImage',
-    defaultColumns: ['artistName', 'profileImage', 'updatedAt'],
+  hooks: {
+    beforeChange: [
+      ({ req, data }) => {
+        console.log('📝 Before Change - Setting createdBy:', {
+          userId: req?.user?.id,
+          data
+        });
+        if (req.user) {
+          data.createdBy = req.user.id;
+        }
+        return data;
+      }
+    ],
+    afterChange: [
+      async ({ req, operation, doc }) => {
+        if (operation === 'create' && req.user) {
+          try {
+            console.log('🔄 Starting user presskit update:', {
+              userId: req.user.id,
+              presskitId: doc.id,
+            });
+
+            // Use payload's update method with the correct parameters
+            const result = await req.payload.update({
+              collection: 'users',
+              id: req.user.id,
+              data: {
+                presskits: [
+                  ...(req.user.presskits || []),
+                  doc.id,
+                ],
+              },
+              depth: 0,
+              user: req.user,
+              overrideAccess: true,
+              req, // Include the request object
+            });
+
+            console.log('✅ User update complete:');
+
+          } catch (err) {
+            console.error('❌ Error updating user presskits:', {
+              error: err.message,
+              stack: err.stack,
+              userId: req.user.id,
+              presskitId: doc.id,
+              user: req.user,
+            });
+          }
+        }
+        return doc;
+      }
+    ],
   },
   fields: [
-    // Basic Information
+    {
+      name: 'createdBy',
+      type: 'relationship',
+      relationTo: 'users',
+      required: false,
+      admin: {
+        readOnly: false,
+        position: 'sidebar',
+      },
+    },
     {
       name: 'profileImage',
       label: 'Profile Image',
@@ -29,7 +92,7 @@ const PressKit: CollectionConfig = {
       admin: {
         description: 'Main profile image displayed at the top (recommended size: 300x275px)'
       },
-      relationTo: 'media', // Assuming you have a media collection
+      relationTo: 'media',
     },
     {
       name: 'artistName',
@@ -187,7 +250,7 @@ const PressKit: CollectionConfig = {
       type: 'array',
       fields: [
         { name: 'title', type: 'text', label: 'Title' },
-        { name: 'image', type: 'upload', relationTo: 'media', required: true },
+        { name: 'image', type: 'upload', relationTo: 'media', required: false },
       ],
     },
     {
@@ -269,7 +332,7 @@ const PressKit: CollectionConfig = {
       fields: [
         { name: 'title', type: 'text', label: 'Title' },
         { name: 'audioUrl', type: 'upload', relationTo: 'media' },
-        { name: 'coverImage', type: 'upload', relationTo: 'media', required: true },
+        { name: 'coverImage', type: 'upload', relationTo: 'media', required: false },
       ],
     },
 
@@ -279,9 +342,7 @@ const PressKit: CollectionConfig = {
       label: 'Additional Info',
       type: 'textarea',
     },
-
-   
   ],
 };
 
-export default PressKit; 
+export default PressKit 
