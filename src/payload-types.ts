@@ -372,18 +372,18 @@ export interface Post {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
-  name?: string | null;
-  updatedAt: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  roles?: ('admin' | 'artist')[];
+  presskits?: string[] | Presskit[];
+  email?: string;
+  resetPasswordToken?: string;
+  resetPasswordExpiration?: string;
+  loginAttempts?: number;
+  lockUntil?: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
+  updatedAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
