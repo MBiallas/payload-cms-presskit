@@ -14,33 +14,11 @@ const PressKit: CollectionConfig = {
     singular: 'Press Kit',
     plural: 'Press Kits',
   },
-  upload: {
-    mimeTypes: ['image/*', 'video/*', 'audio/*'],
+  admin: {
+    useAsTitle: 'artistName',
+    thumbnail: 'profileImage',
+    defaultColumns: ['artistName', 'profileImage', 'updatedAt'],
   },
-  //   beforeChange: [
-  //     ({ req, data }) => {
-  //       console.log('🔄 PressKit Before Change:', {
-  //         profileImage: data.profileImage,
-  //         pressPhotos: data.pressPhotos,
-  //       });
-  //       return data;
-  //     }
-  //   ],
-  //   afterChange: [
-  //     ({ req, doc }) => {
-  //       console.log('✅ PressKit After Change:', {
-  //         id: doc.id,
-  //         profileImage: doc.profileImage,
-  //         pressPhotos: doc.pressPhotos?.map(photo => ({
-  //           id: photo.id,
-  //           imageUrl: photo.image?.url,
-  //           sizes: photo.image?.sizes
-  //         }))
-  //       });
-  //       return doc;
-  //     }
-  //   ],
-  // },
   fields: [
     // Basic Information
     {
