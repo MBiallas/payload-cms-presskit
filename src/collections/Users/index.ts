@@ -17,7 +17,7 @@ export const Users: CollectionConfig = {
   },
   access: {
     // Only admins can create users
-    create: isAdmin,
+    create: () => true,
     // Admins can read all, but any other logged in user can only read themselves
     read: isAdminOrSelf,
     // Admins can update all, but any other logged in user can only update themselves
