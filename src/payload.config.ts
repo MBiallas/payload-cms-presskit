@@ -24,7 +24,7 @@ import { gcsStorage } from '@payloadcms/storage-gcs'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
-
+console.log(dirname)
 // Read the service account file
 const serviceAccountPath = path.join(dirname, '..', 'presskit-436010-240bbeeded22.json')
 const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf-8'))
@@ -44,6 +44,8 @@ export default buildConfig({
     },
     user: Users.slug,
     livePreview: {
+      url: 'http://localhost:3000/presskit-cms',
+      collections: ['presskit'],
       breakpoints: [
         {
           label: 'Mobile',
