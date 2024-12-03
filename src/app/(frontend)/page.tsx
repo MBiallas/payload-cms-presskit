@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Edit } from 'lucide-react'
 import config from '@payload-config'
-import { PressKitEditor } from './_components/PressKitEditor'
+import { EditableText } from './_components/EditableText'
 
 export default async function Page() {
   const payload = await getPayload({ config })
@@ -31,15 +31,13 @@ export default async function Page() {
         {/* Artist Name Section */}
         <div className="relative mb-8">
           <h1 className="text-4xl md:text-6xl font-bold text-emerald-400">
-            {data.artistName || 'Artist Name'}
+            <EditableText
+              text={data.artistName || 'Artist Name'}
+              field="artistName"
+              documentId={data.id}
+              className="text-4xl md:text-6xl font-bold"
+            />
           </h1>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute -right-10 top-2 text-emerald-400"
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
         </div>
 
         {/* Main Content Grid */}
@@ -47,7 +45,9 @@ export default async function Page() {
           {/* Profile Image */}
           <Card className="overflow-hidden w-[300px] h-[275px]">
             <img
-              src={data.profileImage?.url || '/default-image.png'}
+              src={typeof data.profileImage === 'object' && data.profileImage?.url 
+                ? data.profileImage.url 
+                : '/default-image.png'}
               alt={data.artistName || 'Artist'}
               className="w-full h-full object-cover object-center"
             />
@@ -57,26 +57,21 @@ export default async function Page() {
           <div className="relative">
             <h2 className="text-2xl font-bold text-emerald-400 mb-4">
               DJ INFO
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute -right-10 top-0 text-emerald-400"
-              >
-                <Edit className="h-4 w-4" />
-              </Button>
             </h2>
             {/* DJ Info Fields */}
             {Object.entries(data.djInfo || {}).map(([key, value]) => (
               <div key={key} className="flex gap-2 text-white">
                 <span className="font-bold">{key}:</span>
-                <span>{value}</span>
+                <EditableText
+                  text={value as string}
+                  field={`djInfo.${key}`}
+                  documentId={data.id}
+                  className="text-white"
+                />
               </div>
             ))}
           </div>
         </div>
-
-        {/* Client-side editor component */}
-        <PressKitEditor initialData={data} />
       </div>
     </div>
   )
